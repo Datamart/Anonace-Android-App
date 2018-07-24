@@ -1,16 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        local {
-            keyAlias 'local'
-            keyPassword 'local'
-            storeFile file('/tmp/anonace-local.keystore')
-            storePassword 'local'
-        }
-    }
     compileSdkVersion 28
     buildToolsVersion '27.0.3'
+
     defaultConfig {
         applicationId "com.anonace.android"
         minSdkVersion 14
@@ -26,9 +19,6 @@ android {
             }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            signingConfig signingConfigs.local
         }
     }
 }
