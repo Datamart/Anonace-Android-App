@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        local {
+            keyAlias 'local'
+            keyPassword 'local'
+            storeFile file('/tmp/anonace-local.keystore')
+            storePassword 'local'
+        }
+    }
+    compileSdkVersion 28
+    buildToolsVersion '27.0.3'
+    defaultConfig {
+        applicationId "com.anonace.android"
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 2
+        versionName "0.0.2"
+    }
+    buildTypes {
+        release {
+            lintOptions {
+                checkReleaseBuilds false
+                abortOnError false
+            }
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.local
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:24.2.1'
+    implementation 'com.android.support:support-v4:24.2.1'
+}
