@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -81,6 +82,28 @@ public class FullscreenActivity extends AppCompatActivity {
 
                 return true;
             }
+
+            @Override
+            public boolean onJsConfirm(
+                    WebView view, String url, String message, final android.webkit.JsResult result) {
+                new AlertDialog.Builder(FullscreenActivity.this)
+                        .setTitle(R.string.app_name)
+                        .setMessage(message)
+                        .setPositiveButton(android.R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        result.confirm();
+                                    }
+                                })
+                        .setNegativeButton(android.R.string.cancel,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        result.cancel();
+                                    }
+                                }).create().show();
+
+                return true;
+            }
         });
 
         webView.setWebViewClient(new WebViewClient() {
@@ -118,6 +141,14 @@ public class FullscreenActivity extends AppCompatActivity {
 
     @SuppressLint({"SetJavaScriptEnabled"})
     private void setSettings(WebView webView) {
+        CookieManager cookieManager = CookieManager.getInstance();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.removeAllCookies(null);
+        } else {
+            cookieManager.removeAllCookie();
+        }
+        cookieManager.setAcceptCookie(false);
+
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
