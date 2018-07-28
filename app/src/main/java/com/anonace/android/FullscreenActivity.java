@@ -127,8 +127,9 @@ public class FullscreenActivity extends AppCompatActivity {
 
             private boolean shouldOverrideUrlLoading(WebView view, Uri uri) {
                 boolean result = false;
+                String hostname = uri.getHost();
 
-                if (!uri.getHost().contains(getResources().getString(R.string.site_domain))) {
+                if (hostname != null && !hostname.contains(getResources().getString(R.string.site_domain))) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                     result = true;
