@@ -113,6 +113,16 @@ public class FullscreenActivity extends AppCompatActivity {
                 findViewById(R.id.webView).setVisibility(View.VISIBLE);
             }
 
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                String html = "<center style='margin-top:50%'>"+
+                        "<p>Could not connect.</p>" +
+                        "<p><a href='" + getAppURL() + "'>Refresh</a></p>" +
+                        "</center>";
+                view.loadDataWithBaseURL(null, html, "text/html", "UTF-8",null);
+                view.invalidate();
+            }
+
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
