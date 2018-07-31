@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.PermissionRequest;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -20,7 +19,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class FullscreenActivity extends AppCompatActivity {
-    private static final String TAG = FullscreenActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +29,10 @@ public class FullscreenActivity extends AppCompatActivity {
         setSettings(webView);
         setWebViewClient(webView);
         webView.loadUrl(getAppURL());
+
+        findViewById(R.id.splashView).setVisibility(View.GONE);
+        webView.setVisibility(View.VISIBLE);
+        // webView.invalidate();
     }
 
     @Override
@@ -56,17 +58,6 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private void setWebViewClient(WebView webView) {
         webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onPermissionRequest(final PermissionRequest request) {
-                FullscreenActivity.this.runOnUiThread(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void run() {
-                        request.grant(request.getResources());
-                    }
-                });
-            }
-
             @Override
             public boolean onJsAlert(
                     WebView view, String url, String message, final android.webkit.JsResult result) {
@@ -107,12 +98,6 @@ public class FullscreenActivity extends AppCompatActivity {
         });
 
         webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                findViewById(R.id.splashView).setVisibility(View.GONE);
-                findViewById(R.id.webView).setVisibility(View.VISIBLE);
-            }
-
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 String html = "<center style='margin-top:50%'>"+
